@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by nfaronia , .*
+*This project has been created as part of the 42 curriculum by nfaronia , aamr.*
 
 # cub3D
 
