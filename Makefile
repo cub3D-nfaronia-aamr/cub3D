@@ -5,8 +5,20 @@ NAME = cub3d
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
+# get_next_line
+GNL_DIR = src/get_next_line
+
+
+GNL_SRC = $(GNL_DIR)/get_next_line.c \
+          $(GNL_DIR)/get_next_line_utils.c
+
 # Sources
-SRC =	src/main.c
+SRC =	src/main.c\
+		src/utils.c\
+		src/hook.c\
+		src/parse/parser.c\
+		src/parse/texture.c\
+		$(GNL_SRC)
 
 # Objects
 OBJS = $(SRC:.c=.o)
@@ -21,7 +33,7 @@ MLX = $(MLX_DIR)/libmlx.a
 MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
 # Includes
-INC = -Ilibft -Iminilibx-linux -Iinclude
+INC = -Ilibft -Iminilibx-linux -Iinclude -I$(GNL_DIR)
 
 # Default rule
 all: $(LIBFT) $(MLX) $(NAME)
