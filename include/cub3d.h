@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
+/*   By: aamr <aamr@student.42amman.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:24 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/10/08 17:28:14 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/10/16 23:13:28 by aamr             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "mlx.h"
-# include "libft.h"
-# include "get_next_line.h"
+# include "../minilibx-linux/mlx.h"
+# include "../libft/libft.h"
+# include "../get_next_line/get_next_line.h"
 
 # include <stdio.h>
 # include <unistd.h>
@@ -34,8 +34,8 @@ typedef struct s_player
 {
 	double	x;
 	double	y;
-	double	x_direction;
-	double	y_direction;
+	double	xd;
+	double	yd;
 	double	angle;
 }	t_player;
 
@@ -84,7 +84,7 @@ typedef struct s_data
 }	t_data;
 
 //hook.c
-int		key_hook(int keycode, t_mlx *game);
+int		key_hook(int keycode, void *param);
 int		expose_hook(void *param);
 
 //utils.c
@@ -102,5 +102,9 @@ void	find_player(t_map *map, t_player *player);
 //texture.c
 void	texture_char(t_config *config, char *line, int *i);
 void	texture_num(t_config *config, char *line, int *i);
+
+
+//draw_map.c
+void	draw_map(t_data *data);
 
 #endif

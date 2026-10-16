@@ -23,6 +23,14 @@ SRC =	src/main.c\
 # Objects
 OBJS = $(SRC:.c=.o)
 
+# Test sources and objects
+TEST_SRC = src/test.c \
+		   src/draw_map.c \
+		   src/hook.c \
+		   src/utils.c
+TEST_OBJS = $(TEST_SRC:.c=.o)
+TEST_NAME = cub3d_test
+
 # Libft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -42,6 +50,10 @@ all: $(LIBFT) $(MLX) $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
+# Build test program without the main program sources
+test: $(TEST_OBJS) $(LIBFT) $(MLX)
+	$(CC) $(CFLAGS) $(TEST_OBJS) $(LIBFT) $(MLX_FLAGS) -o $(TEST_NAME)
+
 # Compile .c to .o
 %.o: %.c
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
@@ -56,17 +68,17 @@ $(MLX):
 
 # Clean object files
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS) $(TEST_OBJS)
 	$(MAKE) -C $(LIBFT_DIR) clean
 	$(MAKE) -C $(MLX_DIR) clean
 
 # Full clean
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(TEST_NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 	$(MAKE) -C $(MLX_DIR) clean
 
 # Recompile
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all test clean fclean re
