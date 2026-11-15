@@ -18,6 +18,8 @@ SRC =	src/main.c\
 		src/hook.c\
 		src/parse/parser.c\
 		src/parse/texture.c\
+		src/parse/player.c\
+		src/parse/map.c\
 		$(GNL_SRC)
 
 # Objects

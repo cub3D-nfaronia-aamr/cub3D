@@ -6,128 +6,248 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 09:09:26 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/10/08 17:25:23 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/15 09:20:58 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	open_file(t_map *map, t_config *config, t_player *player)
+int	count_map_line(int fd)
 {
 	char	*line;
-	int		fd;
 	int		i;
 	int		num_line;
+	int		in_map;
 
 	num_line = 0;
-	fd = open("src/test/test.cub", O_RDONLY);
-	if (fd == -1)
-	{
-		perror("open");
-		return ;
-	}
+	in_map = 0;
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
 		i = 0;
-		if (line[i] == '1')
+		while (line[i] == ' ' || line[i] == '\t')
+			i++;
+		if (is_empty_line(line) && in_map == 0)
+		{
+			free(line);
+			line = get_next_line(fd);
+			continue ;
+		}
+		else if ((ft_strncmp(line + i, "NO", 2) == 0
+				|| ft_strncmp(line + i, "SO", 2) == 0
+				|| ft_strncmp(line + i, "WE", 2) == 0
+				|| ft_strncmp(line + i, "EA", 2) == 0)
+			&& (line[i + 2] == ' ' || line[i + 2] == '\t') && in_map == 0)
+		{
+			free(line);
+			line = get_next_line(fd);
+			continue ;
+		}
+		else if ((line[i] == 'F' || line[i] == 'C')
+			&& (line[i + 1] == ' ' || line[i + 1] == '\t') && in_map == 0)
+		{
+			free(line);
+			line = get_next_line(fd);
+			continue ;
+		}
+		else if (allow_char_map(line))
+		{
+			in_map = 1;
 			num_line++;
+		}
+		else
+		{
+			printf("Error\nInvalid line");
+			free(line);
+			return (0);
+		}
 		free(line);
 		line = get_next_line(fd);
+	}
+	if (num_line == 0)
+	{
+		printf("Error\nInvalid map");
+		return (0);
+	}
+	return (num_line);
+}
+
+int	is_empty_line(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (!(line[i] == ' ' || line[i] == '\t' || line[i] == '\n'))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	allow_char_map(char *line)
+{
+	int	i;
+
+	i = 0;
+	if (is_empty_line(line))
+		return (0);
+	while (line[i])
+	{
+		while (line[i] == ' ' || line[i] == '\t' )
+			i++;
+		if (line[i] == '\0')
+			return (1);
+		if (!(line[i] == '0' || line[i] == '1'
+				|| line[i] == 'N' || line[i] == 'S'
+				|| line[i] == 'W' || line[i] == 'E'
+				|| line[i] == ' ' || line[i] == '\t'
+				|| line[i] == '\n'))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	parse_file(t_map *map, t_config *config, int fd)
+{
+	char	*line;
+	int		i;
+	int		num_line;
+	char	*map_line;
+	int		in_map;
+
+	num_line = 0;
+	in_map = 0;
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		i = 0;
+		while (line[i] == ' ' || line[i] == '\t')
+			i++;
+		if (is_empty_line(line) && in_map == 0)
+		{
+			free(line);
+			line = get_next_line(fd);
+			continue ;
+		}
+		else if ((ft_strncmp(line + i, "NO", 2) == 0
+				|| ft_strncmp(line + i, "SO", 2) == 0
+				|| ft_strncmp(line + i, "WE", 2) == 0
+				|| ft_strncmp(line + i, "EA", 2) == 0) && in_map == 0)
+		{
+			if (!texture_char(config, line, &i))
+			{
+				printf("Error\nInvalid texture");
+				free(line);
+				return (0);
+			}
+		}
+		else if ((line[i] == 'F' || line[i] == 'C') && in_map == 0)
+		{
+			if (!texture_num(config, line, &i))
+			{
+				printf("Error\nInvalid texture");
+				free(line);
+				return (0);
+			}
+		}
+		else if (allow_char_map(line))
+		{
+			in_map = 1;
+			if (num_line < map->map_height)
+			{
+				map_line = map_data(map, line, num_line);
+				if (!map_line)
+				{
+					printf("Error\nInvalid map");
+					free(line);
+					return (0);
+				}
+				num_line++;
+			}
+			else
+			{
+				printf("Error\nInvalid line");
+				free(line);
+				return (0);
+			}
+		}
+		else
+		{
+			printf("Error\nInvalid line");
+			free(line);
+			return (0);
+		}
+		free(line);
+		line = get_next_line(fd);
+	}
+	if (num_line != map->map_height)
+	{
+		printf("Error\nInvalid map");
+		return (0);
+	}
+	return (1);
+}
+
+int	validate_player(t_map *map, t_player *player)
+{
+	if (count_players(map))
+		locate_player(map, player);
+	else
+	{
+		printf("Error\nInvalid number of players.");
+		return (0);
+	}
+	return (1);
+}
+
+int	open_file(t_map *map, t_config *config, t_player *player, char *argv)
+{
+	int		fd;
+	int		num_line;
+
+	map->map_width = 0;
+	fd = open(argv, O_RDONLY);
+	if (fd == -1)
+	{
+		perror("open");
+		return (0);
+	}
+	num_line = count_map_line(fd);
+	if (num_line == 0)
+	{
+		printf("Error\nInvalid map");
+		close(fd);
+		return (0);
 	}
 	map->map_height = num_line;
 	close(fd);
-	map->map_data = malloc((num_line + 1) * sizeof(char *));
-	if (!map->map_data)
-		return ;
-	map->map_data[map->map_height] = NULL;
-	num_line = 0;
-	fd = open("src/test/test.cub", O_RDONLY);
+	if (!allocate_map(map, num_line))
+	{
+		printf("Error\nInvalid malloc");
+		return (0);
+	}
+	fd = open(argv, O_RDONLY);
 	if (fd == -1)
 	{
 		perror("open");
-		return ;
+		free_map(map);
+		return (0);
 	}
-	line = get_next_line(fd);
-	while (line != NULL)
+	if (!parse_file(map, config, fd))
 	{
-		i = 0;
-		texture_char(config, line, &i);
-		texture_num(config, line, &i);
-		if (line[i] == '1')
-		{
-			map_data(map, line, &i, num_line);
-			num_line++;
-		}
-		free(line);
-		line = get_next_line(fd);
+		close(fd);
+		free_map(map);
+		return (0);
 	}
 	close(fd);
-	find_player(map, player);
-}
-
-void	map_data(t_map *map, char *line, int *i, int num_line)
-{
-	int		len;
-
-	while (line[*i] == ' ' || line[*i] == '\t')
-		(*i)++;
-	len = ft_strlen(line);
-	if (line[len - 1] == '\n')
-		len--;
-	map->map_width = len;
-	map->map_data[num_line] = ft_substr(line, 0, len);
-}
-
-void	find_player(t_map *map, t_player *player)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (map->map_data[y])
+	if (validate_player(map, player))
+		return (1);
+	else
 	{
-		x = 0;
-		while (map->map_data[y][x])
-		{
-			if (map->map_data[y][x] == 'N')
-			{
-				player->x = x + 0.5;
-				player->y = y + 0.5;
-				player->x_direction = 0;
-				player->y_direction = -1;
-				player->angle = -PI / 2;
-				return ;
-			}
-			else if (map->map_data[y][x] == 'S')
-			{
-				player->x = x + 0.5;
-				player->y = y + 0.5;
-				player->x_direction = 0;
-				player->y_direction = 1;
-				player->angle = PI / 2;
-				return ;
-			}
-			else if (map->map_data[y][x] == 'E')
-			{
-				player->x = x + 0.5;
-				player->y = y + 0.5;
-				player->x_direction = 1;
-				player->y_direction = 0;
-				player->angle = 0;
-				return ;
-			}
-			else if (map->map_data[y][x] == 'W')
-			{
-				player->x = x + 0.5;
-				player->y = y + 0.5;
-				player->x_direction = -1;
-				player->y_direction = 0;
-				player->angle = PI;
-				return ;
-			}
-			x++;
-		}
-		y++;
+		free_map(map);
+		return (0);
 	}
 }

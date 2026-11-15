@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:02 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/10/08 17:27:36 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/14 21:24:40 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,19 @@ void	initialize(t_mlx *game)
 			&game->bits_per_pixel, &game->size_line, &game->endian);
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_map		map;
 	t_config	config;
 	t_player	player;
 	int			i;
 
+	(void)argc;
 	ft_bzero(&map, sizeof(t_map));
 	ft_bzero(&config, sizeof(t_config));
 	ft_bzero(&player, sizeof(t_player));
 
-	open_file(&map, &config, &player);
+	open_file(&map, &config, &player, argv[1]);
 
 	printf("========== TEXTURES ==========\n");
 	printf("NO: %s\n", config.no);
