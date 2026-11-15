@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:24 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/15 09:31:25 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/15 12:02:11 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,16 @@ void	my_mlx_pixel_put(t_mlx *image, int x, int y, int color);
 
 //parse
 //parser.c
-int	count_map_line(int fd);
-int	is_empty_line(char *line);
-int	allow_char_map(char *line);
-int	parse_file(t_map *map, t_config *config, int fd);
-int	validate_player(t_map *map, t_player *player);
-int	open_file(t_map *map, t_config *config, t_player *player, char *argv);
+int		count_map_line(int fd);
+int		is_empty_line(char *line);
+int		allow_char_map(char *line);
+int		parse_file(t_map *map, t_config *config, int fd);
+int		validate_player(t_map *map, t_player *player);
+int		open_file(t_map *map, t_config *config, t_player *player, char *argv);
 
 //texture.c
-void	texture_char(t_config *config, char *line, int *i);
-void	texture_num(t_config *config, char *line, int *i);
+int		texture_char(t_config *config, char *line, int *i);
+int		texture_num(t_config *config, char *line, int *i);
 
 //player.c
 int		count_players(t_map *map);

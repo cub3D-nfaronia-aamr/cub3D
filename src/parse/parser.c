@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 09:09:26 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/15 09:20:58 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/15 12:49:13 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,27 @@ int	allow_char_map(char *line)
 	return (1);
 }
 
+void	init_config(t_config *config)
+{
+	config->no = NULL;
+	config->so = NULL;
+	config->we = NULL;
+	config->ea = NULL;
+	config->floor.r = -1;
+	config->floor.g = -1;
+	config->floor.b = -1;
+	config->ceiling.r = -1;
+	config->ceiling.g = -1;
+	config->ceiling.b = -1;
+}
+
+void	init_map(t_map *map)
+{
+	map->map_data = NULL;
+	map->map_height = 0;
+	map->map_width = 0;
+}
+
 int	parse_file(t_map *map, t_config *config, int fd)
 {
 	char	*line;
@@ -208,7 +229,8 @@ int	open_file(t_map *map, t_config *config, t_player *player, char *argv)
 	int		fd;
 	int		num_line;
 
-	map->map_width = 0;
+	init_config(config);
+	init_map(map);
 	fd = open(argv, O_RDONLY);
 	if (fd == -1)
 	{
