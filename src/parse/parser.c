@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 09:09:26 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/17 10:35:04 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/17 14:17:02 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,7 @@ int	count_map_line(int fd)
 		{
 			printf("Error\nInvalid line");
 			free(line);
-			
-				clear_gnl();
+			clear_gnl();
 			return (0);
 		}
 		free(line);
@@ -310,6 +309,17 @@ int	validate_player(t_map *map, t_player *player)
 	return (1);
 }
 
+int	not_empty(t_config *config)
+{
+	if (config->no == NULL || config->so == NULL
+		|| config->we == NULL || config->ea == NULL
+		|| config->floor.r == -1 || config->floor.g == -1
+		|| config->floor.b == -1 || config->ceiling.r == -1
+		|| config->ceiling.g == -1 || config->ceiling.b == -1)
+		return (0);
+	return (1);
+}
+
 int	open_file(t_map *map, t_config *config, t_player *player, char *argv)
 {
 	int		fd;
@@ -353,6 +363,13 @@ int	open_file(t_map *map, t_config *config, t_player *player, char *argv)
 		return (0);
 	}
 	close(fd);
+	if (!not_empty(config))
+	{
+		printf("Error\nInvalid texture");
+		free_map(map);
+		free_config(config);
+		return (0);
+	}
 	if (!validate_walls(map))
 	{
 		free_map(map);

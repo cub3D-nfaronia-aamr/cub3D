@@ -6,13 +6,11 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 15:01:09 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/17 10:32:52 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/17 12:54:21 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-///////////////
-
 
 static char	*stc;
 
@@ -21,8 +19,6 @@ void	clear_gnl(void)
 	free(stc);
 	stc = NULL;
 }
-
-
 
 size_t	ft_strlen(const char *s)
 {
@@ -102,29 +98,6 @@ char	*get_next_line(int fd)
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
-	stc = read_file(fd, buffer, stc);
-	if (!stc || *stc == '\0')
-	{
-		free(stc);
-		stc = NULL;
-		return (NULL);
-	}
-	line = line_pick(stc);
-	stc = line_shift(stc);
-	return (line);
-}
-
-/*char	*get_next_line(int fd)
-{
-	static char	*stc;
-	char		*buffer;
-	char		*line;
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (NULL);
 	stc = read_file (fd, buffer, stc);
 	if (!stc || *stc == '\0')
 	{
@@ -135,4 +108,4 @@ char	*get_next_line(int fd)
 	line = line_pick(stc);
 	stc = line_shift(stc);
 	return (line);
-}*/
+}

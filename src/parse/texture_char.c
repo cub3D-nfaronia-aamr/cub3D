@@ -6,11 +6,32 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 09:09:26 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/17 02:07:28 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/17 15:16:40 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int	correct_path(char *path)
+{
+	int	fd;
+
+	fd = open(path, O_DIRECTORY);
+	if (fd != -1)
+	{
+		close(fd);
+		printf("Error\ncPath is a directory\n");
+		return (0);
+	}
+	fd = open(path, O_RDONLY);
+	if (fd == -1)
+	{
+		printf("Error\ncannot open path.\n");
+		return (0);
+	}
+	close(fd);
+	return (1);
+}
 
 static int	get_path(char *line, int *i, int *start)
 {
@@ -108,6 +129,12 @@ int	texture_char(t_config *config, char *line, int *i)
 	if (!*path)
 	{
 		printf("Error\nInvalid malloc");
+		return (0);
+	}
+	if (!correct_path(*path))
+	{
+		free(*path);
+		*path = NULL;
 		return (0);
 	}
 	return (1);
