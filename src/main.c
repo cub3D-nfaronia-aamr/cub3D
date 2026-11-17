@@ -6,13 +6,88 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:02 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/14 21:24:40 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/17 10:15:04 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "cub3d.h"
 
-void	initialize(t_mlx *game)
+static int	check_extension(char *filename)
+{
+	int	len;
+
+	len = ft_strlen(filename);
+	if (len < 5)
+		return (0);
+	if (ft_strncmp(filename + len - 4, ".cub", 4) != 0)
+		return (0);
+	return (1);
+}
+
+static void	print_config(t_config *config)
+{
+	printf("\n--- TEXTURES ---\n");
+	printf("NO: %s\n", config->no);
+	printf("SO: %s\n", config->so);
+	printf("WE: %s\n", config->we);
+	printf("EA: %s\n", config->ea);
+
+	printf("\n--- COLORS ---\n");
+	printf("Floor: %d,%d,%d\n",
+		config->floor.r, config->floor.g, config->floor.b);
+	printf("Ceiling: %d,%d,%d\n",
+		config->ceiling.r, config->ceiling.g, config->ceiling.b);
+}
+
+static void	print_map(t_map *map)
+{
+	int	i;
+
+	printf("\n--- MAP ---\n");
+	i = 0;
+	while (i < map->map_height)
+	{
+		printf("%s\n", map->map_data[i]);
+		i++;
+	}
+	printf("Height: %d\n", map->map_height);
+	printf("Width: %d\n", map->map_width);
+}
+
+int	main(int argc, char **argv)
+{
+	t_map		map;
+	t_config	config;
+	t_player	player;
+
+	if (argc != 2)
+	{
+		printf("Error\nUsage: ./cub3D <map.cub>\n");
+		return (1);
+	}
+	if (!check_extension(argv[1]))
+	{
+		printf("Error\nFile must have .cub extension\n");
+		return (1);
+	}
+	if (!open_file(&map, &config, &player, argv[1]))
+		return (1);
+
+	printf("\nMap parsed successfully!\n");
+
+	print_config(&config);
+	print_map(&map);
+
+	/* Print player information here if needed */
+
+	free_map(&map);
+	free_config(&config);
+	return (0);
+}
+
+
+/*void	initialize(t_mlx *game)
 {
 	ft_bzero(game, sizeof(t_mlx));
 	game->mlx = mlx_init();
@@ -82,7 +157,7 @@ int	main(int argc, char **argv)
 	printf("angle: %f\n", player.angle);
 
 	return (0);
-}
+}*/
 
 
 

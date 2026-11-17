@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 09:09:26 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/15 12:49:13 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/17 10:35:04 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	count_map_line(int fd)
 		{
 			printf("Error\nInvalid line");
 			free(line);
+			
+				clear_gnl();
 			return (0);
 		}
 		free(line);
@@ -70,6 +72,85 @@ int	count_map_line(int fd)
 		return (0);
 	}
 	return (num_line);
+}
+
+void	free_config(t_config *config)
+{
+	free(config->no);
+	free(config->so);
+	free(config->we);
+	free(config->ea);
+	config->no = NULL;
+	config->so = NULL;
+	config->we = NULL;
+	config->ea = NULL;
+}
+
+int	validate_walls(t_map *map)
+{
+	int		x;
+	int		y;
+	char	**map_data;
+	int		len;
+	int		len_up;
+	int		len_down;
+
+	map_data = map->map_data;
+	x = 1;
+	y = 0;
+	while (map_data[0][y])
+	{
+		if (map_data[0][y] != '1')
+		{
+			printf("Error\nInvalid map");
+			return (0);
+		}
+		y++;
+	}
+	y = 0;
+	while (map_data[map->map_height - 1][y])
+	{
+		if (map_data[map->map_height - 1][y] != '1')
+		{
+			printf("Error\nInvalid map");
+			return (0);
+		}
+		y++;
+	}
+	while (x < map->map_height - 1)
+	{
+		y = 1;
+		len_up = ft_strlen(map_data[x - 1]);
+		len_down = ft_strlen(map_data[x + 1]);
+		len = ft_strlen(map->map_data[x]);
+		/*if (map_data[x][0] != '1' || map_data[x][len - 1] != '1')
+		{
+			printf("Error\nInvalid map");
+			return (0);
+		}*/
+		while (y < len - 1)
+		{
+			if ((map_data[x][y] == '0' || map_data[x][y] == 'N'
+				|| map_data[x][y] == 'S' || map_data[x][y] == 'E'
+				|| map_data[x][y] == 'W'))
+			{
+				if (y >= len_up || y >= len_down)
+				{
+					printf("Error\nInvalid map");
+					return (0);
+				}
+				if (map_data[x + 1][y] == ' ' || map_data[x - 1][y] == ' '
+				|| map_data[x][y + 1] == ' ' || map_data[x][y - 1] == ' ')
+				{
+					printf("Error\nInvalid map");
+					return (0);
+				}
+			}
+			y++;
+		}
+		x++;
+	}
+	return (1);
 }
 
 int	is_empty_line(char *line)
@@ -162,6 +243,7 @@ int	parse_file(t_map *map, t_config *config, int fd)
 			{
 				printf("Error\nInvalid texture");
 				free(line);
+				clear_gnl();
 				return (0);
 			}
 		}
@@ -171,6 +253,7 @@ int	parse_file(t_map *map, t_config *config, int fd)
 			{
 				printf("Error\nInvalid texture");
 				free(line);
+				clear_gnl();
 				return (0);
 			}
 		}
@@ -184,6 +267,7 @@ int	parse_file(t_map *map, t_config *config, int fd)
 				{
 					printf("Error\nInvalid map");
 					free(line);
+				clear_gnl();
 					return (0);
 				}
 				num_line++;
@@ -192,6 +276,7 @@ int	parse_file(t_map *map, t_config *config, int fd)
 			{
 				printf("Error\nInvalid line");
 				free(line);
+				clear_gnl();
 				return (0);
 			}
 		}
@@ -199,6 +284,7 @@ int	parse_file(t_map *map, t_config *config, int fd)
 		{
 			printf("Error\nInvalid line");
 			free(line);
+				clear_gnl();
 			return (0);
 		}
 		free(line);
@@ -256,20 +342,30 @@ int	open_file(t_map *map, t_config *config, t_player *player, char *argv)
 	{
 		perror("open");
 		free_map(map);
+		free_config(config);
 		return (0);
 	}
 	if (!parse_file(map, config, fd))
 	{
 		close(fd);
 		free_map(map);
+		free_config(config);
 		return (0);
 	}
 	close(fd);
+	if (!validate_walls(map))
+	{
+		free_map(map);
+		free_config(config);
+		return (0);
+	}
 	if (validate_player(map, player))
 		return (1);
 	else
 	{
 		free_map(map);
+		free_config(config);
 		return (0);
 	}
+	return (1);
 }

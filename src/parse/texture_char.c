@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   texture.c                                          :+:      :+:    :+:   */
+/*   texture_char.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 09:09:26 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/15 15:13:33 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/17 02:07:28 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,23 @@ static int	get_path(char *line, int *i, int *start)
 	while (line[*i] && line[*i] != '\n' && line[*i] != '\r')
 		(*i)++;
 	end = *i - 1;
-	while ((end >= start) && (line[end] == ' ' || line[end] == '\t'))
+	while ((end >= *start) && (line[end] == ' ' || line[end] == '\t'))
 		end--;
 	*i = end + 1;
+	if (end - *start + 1 >= 5)
+	{
+		end = end - 3;
+		if (!(ft_strncmp(line + end, ".xpm", 4) == 0))
+		{
+			printf("Error\nInvalid path\n");
+			return (0);
+		}
+	}
+	else
+	{
+		printf("Error\nInvalid path\n");
+		return (0);
+	}
 	return (1);
 }
 
@@ -96,62 +110,5 @@ int	texture_char(t_config *config, char *line, int *i)
 		printf("Error\nInvalid malloc");
 		return (0);
 	}
-	return (1);
-}
-
-static void	free_split(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		free(str[i++]);
-	free(str);
-}
-
-static void	rgb_data(t_config *config, char **numbers, char type)
-{
-	if (type == 'F')
-	{
-		config->floor.r = ft_atoi(numbers[0]);
-		config->floor.g = ft_atoi(numbers[1]);
-		config->floor.b = ft_atoi(numbers[2]);
-	}
-	else
-	{
-		config->ceiling.r = ft_atoi(numbers[0]);
-		config->ceiling.g = ft_atoi(numbers[1]);
-		config->ceiling.b = ft_atoi(numbers[2]);
-	}
-}
-
-int	texture_num(t_config *config, char *line, int *i)
-{
-	int		start;
-	char	*num;
-	char	**numbers;
-	char	type;
-
-	while (line[*i] == ' ' || line[*i] == '\t')
-		(*i)++;
-	type = line[*i];
-	if ((type != 'F' && type != 'C')
-		|| (line[*i + 1] != ' ' && line[*i + 1] != '\t'))
-		return (0);
-	(*i)++;
-	while (line[*i] == ' ' || line[*i] == '\t')
-		(*i)++;
-	start = *i;
-	while (line[*i] && line[*i] != '\n')
-		(*i)++;
-	num = ft_substr(line, start, *i - start);
-	if (!num)
-		return (0);
-	numbers = ft_split(num, ',');
-	free(num);
-	if (!numbers)
-		return (0);
-	rgb_data(config, numbers, type);
-	free_split(numbers);
 	return (1);
 }

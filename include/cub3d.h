@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:24 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/15 12:02:11 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/17 10:16:48 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,18 @@ void	my_mlx_pixel_put(t_mlx *image, int x, int y, int color);
 int		count_map_line(int fd);
 int		is_empty_line(char *line);
 int		allow_char_map(char *line);
+void	init_config(t_config *config);
+void	init_map(t_map *map);
 int		parse_file(t_map *map, t_config *config, int fd);
 int		validate_player(t_map *map, t_player *player);
 int		open_file(t_map *map, t_config *config, t_player *player, char *argv);
+void	free_config(t_config *config);
 
-//texture.c
+
+//texture_char.c
 int		texture_char(t_config *config, char *line, int *i);
+
+//texture_num.c
 int		texture_num(t_config *config, char *line, int *i);
 
 //player.c
@@ -114,5 +120,7 @@ void	locate_player(t_map *map, t_player *player);
 void	free_map(t_map *map);
 char	*map_data(t_map *map, char *line, int num_line);
 int		allocate_map(t_map *map, int num_line);
+
+void	init_config(t_config *config);
 
 #endif

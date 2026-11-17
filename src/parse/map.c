@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/12 00:01:06 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/15 12:31:20 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/17 07:47:03 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,12 @@ void	free_map(t_map *map)
 	int	x;
 
 	x = 0;
-	if (map->map_data)
+	if (!map || !map->map_data)
+		return ;
+	while (map->map_data[x])
 	{
-		while (map->map_data[x])
-		{
-			free(map->map_data[x]);
-			x++;
-		}
+		free(map->map_data[x]);
+		x++;
 	}
 	free(map->map_data);
 	map->map_data = NULL;
