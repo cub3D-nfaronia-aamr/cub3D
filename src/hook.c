@@ -6,26 +6,19 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:15 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/10/04 14:22:04 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/19 03:53:35 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	key_hook(int keycode, t_mlx *game)
-{
-	if (keycode == ESC)
-		clean_exit(game);
-	return (0);
-}
-
 int	expose_hook(void *param)
 {
-	t_mlx	*game;
+	t_data	*data;
 
-	game = (t_mlx *)param;
-	if (!game)
+	data = (t_data *)param;
+	if (!data)
 		return (0);
-	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+	mlx_put_image_to_window(data->mlx.mlx, data->mlx.win, data->mlx.img, 0, 0);
 	return (0);
 }

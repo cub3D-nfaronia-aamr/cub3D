@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/11 22:50:08 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/11 23:58:04 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/19 00:27:30 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	locate_player(t_map *map, t_player *player)
 			|| map->map_data[y][x] == 'E' || map->map_data[y][x] == 'W')
 			{
 				set_player_direction(map, player, x, y);
+				map->map_data[y][x] = '0';
 				return ;
 			}
 			x++;

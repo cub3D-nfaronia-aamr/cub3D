@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 09:09:26 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/17 14:17:02 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/18 23:18:06 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,18 @@ int	count_map_line(int fd)
 	int		i;
 	int		num_line;
 	int		in_map;
+	int		end_map;
 
 	num_line = 0;
 	in_map = 0;
+	end_map = 0;
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
 		i = 0;
 		while (line[i] == ' ' || line[i] == '\t')
 			i++;
-		if (is_empty_line(line) && in_map == 0)
+		if (is_empty_line(line) && in_map == 0 && end_map == 0)
 		{
 			free(line);
 			line = get_next_line(fd);
@@ -37,24 +39,28 @@ int	count_map_line(int fd)
 				|| ft_strncmp(line + i, "SO", 2) == 0
 				|| ft_strncmp(line + i, "WE", 2) == 0
 				|| ft_strncmp(line + i, "EA", 2) == 0)
-			&& (line[i + 2] == ' ' || line[i + 2] == '\t') && in_map == 0)
+			&& (line[i + 2] == ' ' || line[i + 2] == '\t')
+			&& in_map == 0 && end_map == 0)
 		{
 			free(line);
 			line = get_next_line(fd);
 			continue ;
 		}
 		else if ((line[i] == 'F' || line[i] == 'C')
-			&& (line[i + 1] == ' ' || line[i + 1] == '\t') && in_map == 0)
+			&& (line[i + 1] == ' ' || line[i + 1] == '\t')
+			&& in_map == 0 && end_map == 0)
 		{
 			free(line);
 			line = get_next_line(fd);
 			continue ;
 		}
-		else if (allow_char_map(line))
+		else if (allow_char_map(line) && end_map == 0)
 		{
 			in_map = 1;
 			num_line++;
 		}
+		else if (is_empty_line(line) && in_map == 1)
+			end_map = 1;
 		else
 		{
 			printf("Error\nInvalid line");
@@ -95,45 +101,26 @@ int	validate_walls(t_map *map)
 	int		len_down;
 
 	map_data = map->map_data;
-	x = 1;
-	y = 0;
-	while (map_data[0][y])
+	x = 0;
+	while (x < map->map_height)
 	{
-		if (map_data[0][y] != '1')
-		{
-			printf("Error\nInvalid map");
-			return (0);
-		}
-		y++;
-	}
-	y = 0;
-	while (map_data[map->map_height - 1][y])
-	{
-		if (map_data[map->map_height - 1][y] != '1')
-		{
-			printf("Error\nInvalid map");
-			return (0);
-		}
-		y++;
-	}
-	while (x < map->map_height - 1)
-	{
-		y = 1;
-		len_up = ft_strlen(map_data[x - 1]);
-		len_down = ft_strlen(map_data[x + 1]);
+		y = 0;
 		len = ft_strlen(map->map_data[x]);
-		/*if (map_data[x][0] != '1' || map_data[x][len - 1] != '1')
-		{
-			printf("Error\nInvalid map");
-			return (0);
-		}*/
-		while (y < len - 1)
+		while (y < len)
 		{
 			if ((map_data[x][y] == '0' || map_data[x][y] == 'N'
 				|| map_data[x][y] == 'S' || map_data[x][y] == 'E'
 				|| map_data[x][y] == 'W'))
 			{
-				if (y >= len_up || y >= len_down)
+				if (x == 0 || x == map->map_height - 1)
+				{
+					printf("Error\nInvalid map");
+					return (0);
+				}
+				len_up = ft_strlen(map_data[x - 1]);
+				len_down = ft_strlen(map_data[x + 1]);
+				if (y == 0 || y == len - 1
+					|| y >= len_up || y >= len_down)
 				{
 					printf("Error\nInvalid map");
 					return (0);
@@ -159,7 +146,8 @@ int	is_empty_line(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (!(line[i] == ' ' || line[i] == '\t' || line[i] == '\n'))
+		if (!(line[i] == ' ' || line[i] == '\t'
+			|| line[i] == '\n' || line[i] == '\r'))
 			return (0);
 		i++;
 	}
@@ -175,15 +163,14 @@ int	allow_char_map(char *line)
 		return (0);
 	while (line[i])
 	{
-		while (line[i] == ' ' || line[i] == '\t' )
+		while (line[i] == ' ')
 			i++;
 		if (line[i] == '\0')
 			return (1);
 		if (!(line[i] == '0' || line[i] == '1'
 				|| line[i] == 'N' || line[i] == 'S'
 				|| line[i] == 'W' || line[i] == 'E'
-				|| line[i] == ' ' || line[i] == '\t'
-				|| line[i] == '\n'))
+				|| line[i] == ' ' || line[i] == '\n' || line[i] == '\r'))
 			return (0);
 		i++;
 	}
@@ -218,16 +205,18 @@ int	parse_file(t_map *map, t_config *config, int fd)
 	int		num_line;
 	char	*map_line;
 	int		in_map;
+	int		end_map;
 
 	num_line = 0;
 	in_map = 0;
+	end_map = 0;
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
 		i = 0;
 		while (line[i] == ' ' || line[i] == '\t')
 			i++;
-		if (is_empty_line(line) && in_map == 0)
+		if (is_empty_line(line) && in_map == 0 && end_map == 0)
 		{
 			free(line);
 			line = get_next_line(fd);
@@ -236,7 +225,8 @@ int	parse_file(t_map *map, t_config *config, int fd)
 		else if ((ft_strncmp(line + i, "NO", 2) == 0
 				|| ft_strncmp(line + i, "SO", 2) == 0
 				|| ft_strncmp(line + i, "WE", 2) == 0
-				|| ft_strncmp(line + i, "EA", 2) == 0) && in_map == 0)
+				|| ft_strncmp(line + i, "EA", 2) == 0)
+			&& in_map == 0 && end_map == 0)
 		{
 			if (!texture_char(config, line, &i))
 			{
@@ -246,7 +236,8 @@ int	parse_file(t_map *map, t_config *config, int fd)
 				return (0);
 			}
 		}
-		else if ((line[i] == 'F' || line[i] == 'C') && in_map == 0)
+		else if ((line[i] == 'F' || line[i] == 'C')
+			&& in_map == 0 && end_map == 0)
 		{
 			if (!texture_num(config, line, &i))
 			{
@@ -256,7 +247,7 @@ int	parse_file(t_map *map, t_config *config, int fd)
 				return (0);
 			}
 		}
-		else if (allow_char_map(line))
+		else if (allow_char_map(line) && end_map == 0)
 		{
 			in_map = 1;
 			if (num_line < map->map_height)
@@ -266,7 +257,7 @@ int	parse_file(t_map *map, t_config *config, int fd)
 				{
 					printf("Error\nInvalid map");
 					free(line);
-				clear_gnl();
+					clear_gnl();
 					return (0);
 				}
 				num_line++;
@@ -279,11 +270,13 @@ int	parse_file(t_map *map, t_config *config, int fd)
 				return (0);
 			}
 		}
+		else if (is_empty_line(line) && in_map == 1)
+			end_map = 1;
 		else
 		{
 			printf("Error\nInvalid line");
 			free(line);
-				clear_gnl();
+			clear_gnl();
 			return (0);
 		}
 		free(line);

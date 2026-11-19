@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:32:55 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/10/04 14:32:56 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/19 02:31:20 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,35 +18,37 @@ void	error(char *str)
 	exit(EXIT_FAILURE);
 }
 
-void	clean_exit(t_mlx *game)
+void	clean_exit(t_data *data)
 {
-	if (game == NULL)
+	if (data == NULL)
 		exit(EXIT_SUCCESS);
-	if (game->img && game->mlx)
+	if (data->mlx.img && data->mlx.mlx)
 	{
-		mlx_destroy_image(game->mlx, game->img);
-		game->img = NULL;
+		mlx_destroy_image(data->mlx.mlx, data->mlx.img);
+		data->mlx.img = NULL;
 	}
-	if (game->win && game->mlx)
+	if (data->mlx.win && data->mlx.mlx)
 	{
-		mlx_destroy_window(game->mlx, game->win);
-		game->win = NULL;
+		mlx_destroy_window(data->mlx.mlx, data->mlx.win);
+		data->mlx.win = NULL;
 	}
-	if (game->mlx)
+	if (data->mlx.mlx)
 	{
-		mlx_destroy_display(game->mlx);
-		free(game->mlx);
-		game->mlx = NULL;
+		mlx_destroy_display(data->mlx.mlx);
+		free(data->mlx.mlx);
+		data->mlx.mlx = NULL;
 	}
+	free_config(&data->config);
+	free_map(&data->map);
 	exit(EXIT_SUCCESS);
 }
 
 int	close_window(void *param)
 {
-	t_mlx	*game;
+	t_data	*data;
 
-	game = (t_mlx *)param;
-	clean_exit(game);
+	data = (t_data *)param;
+	clean_exit(data);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/12 00:01:06 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/17 07:47:03 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/18 22:22:12 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*map_data(t_map *map, char *line, int num_line)
 	char	*in_line;
 
 	len = ft_strlen(line);
-	if (!(len == 0) && line[len - 1] == '\n')
+	while (len > 0 && (line[len - 1] == '\n' || line[len - 1] == '\r'))
 		len--;
 	if (len > map->map_width)
 		map->map_width = len;

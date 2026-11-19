@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 09:09:26 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/17 00:43:03 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/19 00:22:04 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,6 @@ static int	rgb_data(t_config *config, char **numbers, char type)
 	while (numbers[x])
 	{
 		y = 0;
-		z = 0;
-		while (numbers[x][y] == '+')
-			y++;
 		z = y;
 		while (numbers[x][z] == '0')
 			z++;
@@ -59,11 +56,6 @@ static int	rgb_data(t_config *config, char **numbers, char type)
 	while (numbers[x])
 	{
 		num = ft_atoi(numbers[x]);
-		if (num < 0)
-		{
-			printf("Error\nThe color number is less than 0.");
-			return (0);
-		}
 		if (num > 255)
 		{
 			printf("Error\nThe color number is greater than 255.");
@@ -168,7 +160,7 @@ int	texture_num(t_config *config, char *line, int *i)
 	while (line[*i] == ' ' || line[*i] == '\t')
 		(*i)++;
 	start = *i;
-	while (line[*i] && line[*i] != '\n')
+	while (line[*i] && line[*i] != '\n' && line[*i] != '\r')
 		(*i)++;
 	nums = ft_substr(line, start, *i - start);
 	if (!nums)

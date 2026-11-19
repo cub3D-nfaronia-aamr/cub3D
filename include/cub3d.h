@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:24 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/17 10:16:48 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/19 03:53:25 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,18 @@
 # include <sys/time.h>
 # include <string.h>
 
-# define WIDTH 1000
+# define WIDTH  1000
 # define HEIGHT 800
-# define ESC 65307
-# define PI 3.14159
+# define ESC    65307
+# define W      119
+# define A      97
+# define S      115
+# define D      100
+# define LEFT   65361
+# define RIGHT  65363
+# define UP     65362
+# define DOWN   65364
+# define PI     3.14159
 
 typedef struct s_player
 {
@@ -83,13 +91,14 @@ typedef struct s_data
 	t_mlx		mlx;
 }	t_data;
 
+
 //hook.c
-int		key_hook(int keycode, t_mlx *game);
+int		key_hook(int keycode, t_data *data);
 int		expose_hook(void *param);
 
 //utils.c
 void	error(char *str);
-void	clean_exit(t_mlx *game);
+void	clean_exit(t_data *data);
 int		close_window(void *param);
 void	my_mlx_pixel_put(t_mlx *image, int x, int y, int color);
 
@@ -122,5 +131,6 @@ char	*map_data(t_map *map, char *line, int num_line);
 int		allocate_map(t_map *map, int num_line);
 
 void	init_config(t_config *config);
+
 
 #endif
