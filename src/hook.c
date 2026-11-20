@@ -31,13 +31,13 @@ int	move_key(int keycode, void *param)
 	yd = data->map.player.yd;
 
 	if (keycode == 65361)
-		x -= 1;
+		x -= 0.1;
 	else if (keycode == 65363)
-		x += 1;
+		x += 0.1;
 	else if (keycode == 65362)
-		y -= 1;
+		y -= 0.1;
 	else if (keycode == 65364)
-		y += 1;
+		y += 0.1;
 	else if (keycode == 97)
 	{
 		xd -= 0.1 * data->map.player.yd;

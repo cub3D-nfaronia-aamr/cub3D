@@ -1,7 +1,7 @@
 #include "../include/cub3d.h"
 
-#define MAP_TILE_SIZE 100
-#define PLAYER_SIZE 10
+#define MAP_TILE_SIZE 10
+#define PLAYER_SIZE 6
 
 static int	tile_color(char tile)
 {
