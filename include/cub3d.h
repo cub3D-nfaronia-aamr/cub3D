@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:24 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/21 14:47:45 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/21 14:56:47 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,16 +103,6 @@ typedef struct s_data
 	t_mlx		mlx;
 	t_keys		keys;
 }	t_data;
-
-
-//hook.c
-int		is_valid_position(t_data *data, double x, double y);
-void	move_player(t_data *data, double movex, double movey);
-void	rotation_player(t_data *data, double rotation_speed);
-int		key_press(int keycode, t_data *data);
-int		key_release(int keycode, t_data *data);
-int		game_loop(t_data *data);
-int		expose_hook(void *param);
 
 //utils.c
 void	clean_exit(t_data *data);
