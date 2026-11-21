@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:24 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/21 14:56:47 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/21 15:03:39 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,6 @@ typedef struct s_data
 	t_mlx		mlx;
 	t_keys		keys;
 }	t_data;
-
-//utils.c
-void	clean_exit(t_data *data);
-int		close_window(void *param);
-void	my_mlx_pixel_put(t_mlx *image, int x, int y, int color);
-int		is_empty_line(char *line);
 
 //error_clean_utils.c
 void	error_msg(char *msg);
