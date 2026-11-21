@@ -6,17 +6,11 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:32:55 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/21 03:21:33 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/21 12:50:05 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	error(char *str)
-{
-	printf("Error : %s\n", str);
-	exit(EXIT_FAILURE);
-}
 
 void	clean_exit(t_data *data)
 {

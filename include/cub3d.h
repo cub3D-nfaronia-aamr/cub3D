@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:24 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/21 12:39:46 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/21 14:47:45 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,20 @@
 # include <sys/time.h>
 # include <string.h>
 
-# define WIDTH  1000
-# define HEIGHT 800
-# define ESC    65307
-# define W      119
-# define A      97
-# define S      115
-# define D      100
-# define LEFT   65361
-# define RIGHT  65363
-# define UP     65362
-# define DOWN   65364
+# define WIDTH    1000
+# define HEIGHT   800
+# define ESC      65307
+# define W        119
+# define A        97
+# define S        115
+# define D        100
+# define LEFT     65361
+# define RIGHT    65363
+# define UP       65362
+# define DOWN     65364
+# define RADIUS   0.15
+# define MOVE     0.05
+# define ROTATION 0.05
 
 typedef struct s_player
 {
@@ -83,24 +86,42 @@ typedef struct s_mlx
 	int		endian;
 }	t_mlx;
 
+typedef struct s_keys
+{
+	int	w;
+	int	a;
+	int	s;
+	int	d;
+	int	left;
+	int	right;
+}	t_keys;
+
 typedef struct s_data
 {
 	t_config	config;
 	t_map		map;
 	t_mlx		mlx;
+	t_keys		keys;
 }	t_data;
 
 
 //hook.c
-int		key_hook(int keycode, t_data *data);
+int		is_valid_position(t_data *data, double x, double y);
+void	move_player(t_data *data, double movex, double movey);
+void	rotation_player(t_data *data, double rotation_speed);
+int		key_press(int keycode, t_data *data);
+int		key_release(int keycode, t_data *data);
+int		game_loop(t_data *data);
 int		expose_hook(void *param);
 
 //utils.c
-void	error(char *str);
 void	clean_exit(t_data *data);
 int		close_window(void *param);
 void	my_mlx_pixel_put(t_mlx *image, int x, int y, int color);
 int		is_empty_line(char *line);
+
+//error_clean_utils.c
+void	error_msg(char *msg);
 
 //parse
 //config.c

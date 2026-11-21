@@ -15,6 +15,7 @@ GNL_SRC = $(GNL_DIR)/get_next_line.c \
 # Sources
 SRC =	src/main.c\
 		src/utils.c\
+		src/error_clean_utils.c\
 		src/hook.c\
 		src/parse/config.c\
 		src/parse/map.c\
@@ -28,6 +29,7 @@ SRC =	src/main.c\
 		src/parse/texture_utils.c\
 		src/parse/texture.c\
 		src/parse/validate_walls.c\
+
 		$(GNL_SRC)
 
 # Objects
