@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   texture_num.c                                      :+:      :+:    :+:   */
+/*   pcolor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -96,7 +96,7 @@ static int	process_rgb(t_config *config, char *nums, char type)
 	return (ret);
 }
 
-int	texture_num(t_config *config, char *line, int *i)
+int	pcolor(t_config *config, char *line, int *i)
 {
 	char	*nums;
 	char	type;

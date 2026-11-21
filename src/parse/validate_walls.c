@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 09:09:26 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/21 04:15:21 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/21 12:24:04 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	check_cell(t_map *map, int x, int y)
 {
 	if (!check_bounds(map, x, y))
 		return (0);
-	if (!check_neighbors(map, x, y))
+	if (check_neighbors(map, x, y))
 		return (0);
 	return (1);
 }

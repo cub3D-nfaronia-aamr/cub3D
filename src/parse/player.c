@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/11 22:50:08 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/21 12:03:43 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/21 12:21:46 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,13 @@ static void	set_player_direction(t_map *map, t_player *player, int x, int y)
 	if (map->map_data[y][x] == 'N')
 	{
 		player->y_direction = -1;
-		player->angle = -PI / 2;
+		player->angle = -M_PI / 2;
 		return ;
 	}
 	else if (map->map_data[y][x] == 'S')
 	{
 		player->y_direction = 1;
-		player->angle = PI / 2;
+		player->angle = M_PI / 2;
 		return ;
 	}
 	else if (map->map_data[y][x] == 'E')
@@ -70,7 +70,7 @@ static void	set_player_direction(t_map *map, t_player *player, int x, int y)
 	else if (map->map_data[y][x] == 'W')
 	{
 		player->x_direction = -1;
-		player->angle = PI;
+		player->angle = M_PI;
 		return ;
 	}
 }

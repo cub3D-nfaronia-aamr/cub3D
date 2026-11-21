@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/08 09:09:26 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/21 11:17:17 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/21 12:35:32 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ static int	parse_line(t_map *map, t_config *config, char *line, int *num_line)
 	if (is_empty_line(line + i) && *num_line == 0)
 		return (1);
 	if (is_direction_line(line + i) && *num_line == 0)
-		return (texture_char(config, line, &i));
+		return (texture(config, line, &i));
 	if (is_color_line(line + i) && *num_line == 0)
-		return (texture_num(config, line, &i));
+		return (pcolor(config, line, &i));
 	if (!allow_char_map(line + i) || *num_line >= map->map_height)
 	{
 		error_msg("Invalid line");

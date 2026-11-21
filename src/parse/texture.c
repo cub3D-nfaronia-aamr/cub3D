@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   texture_char.c                                     :+:      :+:    :+:   */
+/*   texture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -93,7 +93,7 @@ static int	set_texture_path(char **path, char *line, int *i)
 	return (1);
 }
 
-int	texture_char(t_config *config, char *line, int *i)
+int	texture(t_config *config, char *line, int *i)
 {
 	int		correct;
 	char	**path;
