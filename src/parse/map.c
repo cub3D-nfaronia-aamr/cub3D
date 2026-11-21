@@ -6,11 +6,18 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/12 00:01:06 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/18 22:22:12 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/21 03:12:32 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	init_map(t_map *map)
+{
+	map->map_data = NULL;
+	map->map_height = 0;
+	map->map_width = 0;
+}
 
 void	free_map(t_map *map)
 {
@@ -56,6 +63,29 @@ int	allocate_map(t_map *map, int num_line)
 	while (i <= num_line)
 	{
 		map->map_data[i] = NULL;
+		i++;
+	}
+	return (1);
+}
+
+int	allow_char_map(char *line)
+{
+	int	i;
+
+	i = 0;
+	if (is_empty_line(line))
+		return (0);
+	while (line[i])
+	{
+		while (line[i] == ' ')
+			i++;
+		if (line[i] == '\0')
+			return (1);
+		if (!(line[i] == '0' || line[i] == '1'
+				|| line[i] == 'N' || line[i] == 'S'
+				|| line[i] == 'W' || line[i] == 'E'
+				|| line[i] == ' ' || line[i] == '\n' || line[i] == '\r'))
+			return (0);
 		i++;
 	}
 	return (1);

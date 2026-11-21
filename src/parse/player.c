@@ -6,13 +6,13 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/11/11 22:50:08 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/19 00:27:30 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/21 12:03:43 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	count_players(t_map *map)
+static int	count_players(t_map *map)
 {
 	int	x;
 	int	y;
@@ -75,7 +75,7 @@ static void	set_player_direction(t_map *map, t_player *player, int x, int y)
 	}
 }
 
-void	locate_player(t_map *map, t_player *player)
+static void	locate_player(t_map *map, t_player *player)
 {
 	int	x;
 	int	y;
@@ -97,4 +97,16 @@ void	locate_player(t_map *map, t_player *player)
 		}
 		y++;
 	}
+}
+
+int	validate_player(t_map *map, t_player *player)
+{
+	if (count_players(map))
+		locate_player(map, player);
+	else
+	{
+		error_msg("Invalid number of players.");
+		return (0);
+	}
+	return (1);
 }

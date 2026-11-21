@@ -6,7 +6,7 @@
 /*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:24 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/11/19 03:53:25 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/11/21 11:10:11 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,36 +101,51 @@ void	error(char *str);
 void	clean_exit(t_data *data);
 int		close_window(void *param);
 void	my_mlx_pixel_put(t_mlx *image, int x, int y, int color);
+int		is_empty_line(char *line);
 
 //parse
 //parser.c
 int		count_map_line(int fd);
 int		is_empty_line(char *line);
 int		allow_char_map(char *line);
-void	init_config(t_config *config);
-void	init_map(t_map *map);
 int		parse_file(t_map *map, t_config *config, int fd);
-int		validate_player(t_map *map, t_player *player);
 int		open_file(t_map *map, t_config *config, t_player *player, char *argv);
-void	free_config(t_config *config);
+int		fail_line(char *line);
 
+
+//config.c
+void	init_config(t_config *config);
+void	free_config(t_config *config);
+int		not_empty_config(t_config *config);
 
 //texture_char.c
+int		correct_path(char *path);
 int		texture_char(t_config *config, char *line, int *i);
+int		validate_player(t_map *map, t_player *player);
 
 //texture_num.c
 int		texture_num(t_config *config, char *line, int *i);
+int		rgb_data(t_config *config, char **numbers, char type);
+void	free_split(char **str);
+int		split_count(char **str);
+char	**remove_spaces(char **numbers);
+char	*get_color_line(char *line, int *i);
 
 //player.c
 int		count_players(t_map *map);
 void	locate_player(t_map *map, t_player *player);
 
 //map.c
+void	init_map(t_map *map);
 void	free_map(t_map *map);
 char	*map_data(t_map *map, char *line, int num_line);
 int		allocate_map(t_map *map, int num_line);
 
-void	init_config(t_config *config);
 
+void	error_msg(char *msg);
+
+int		is_direction_line(char *line);
+int		is_color_line(char *line);
+void	skip_spaces(char *line, int *i);
 
 #endif
