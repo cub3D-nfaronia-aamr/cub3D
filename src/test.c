@@ -66,13 +66,13 @@ int	main(void)
 	test.map.player.y = 4;
 	test.map.player.xd = 0;
 	test.map.player.yd = 1;
-	test.map.player.angle = 90;
+	test.map.player.angle = PI / 2;
 
 	if (init_win(&test.mlx))
 		return (1);
 	draw_map(&test);
 	mlx_expose_hook(test.mlx.win, test_expose_hook, &test);
-	mlx_key_hook(test.mlx.win, key_hook, &test);
+	mlx_hook(test.mlx.win, 2, 1L << 0, key_hook, &test);
 	mlx_hook(test.mlx.win, 17, 0, close_hook, &test);
 	mlx_loop(test.mlx.mlx);
 	return (0);

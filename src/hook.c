@@ -1,4 +1,4 @@
-#include "cub3d.h"
+#include "../include/cub3d.h"
 
 static int	can_move_to(t_data *data, double x, double y)
 {
@@ -14,49 +14,59 @@ static int	can_move_to(t_data *data, double x, double y)
 	return (data->map.map_data[map_y][map_x] == '0');
 }
 
+/*
+** angle is in radians, screen space (y points down):
+** 0 = right (E), PI/2 = down (S), PI = left (W), 3PI/2 = up (N).
+** Negative delta turns left (counter-clockwise on screen).
+*/
+static void	rotate_player(t_player *player, double delta)
+{
+	player->angle = fmod(player->angle + delta, 2 * PI);
+	if (player->angle < 0)
+		player->angle += 2 * PI;
+	player->xd = cos(player->angle);
+	player->yd = sin(player->angle);
+}
+
 int	move_key(int keycode, void *param)
 {
 	t_data	*data;
 	double	x;
 	double	y;
-	double 	xd;
-	double 	yd;
 
 	data = (t_data *)param;
 	if (keycode == ESC)
 		clean_exit(&data->mlx);
 	x = data->map.player.x;
 	y = data->map.player.y;
-	xd = data->map.player.xd;
-	yd = data->map.player.yd;
 
 	if (keycode == 65361)
-		x -= 0.1;
+		x -= 0.5;
 	else if (keycode == 65363)
-		x += 0.1;
+		x += 0.5;
 	else if (keycode == 65362)
-		y -= 0.1;
+		y -= 0.5;
 	else if (keycode == 65364)
-		y += 0.1;
-	else if (keycode == 97)
+		y += 0.5;
+	else if (keycode == KEY_W)
 	{
-		xd -= 0.1 * data->map.player.yd;
-		yd += 0.1 * data->map.player.xd;
-		printf("xd: %f, yd: %f\n", xd, yd);
+		x += data->map.player.xd * MOVE_STEP;
+		y += data->map.player.yd * MOVE_STEP;
 	}
-	else if (keycode == 100)
+	else if (keycode == KEY_S)
 	{
-		xd += 0.1 * data->map.player.yd;
-		yd -= 0.1 * data->map.player.xd;
-		printf("xd: %f, yd: %f\n", xd, yd);
+		x -= data->map.player.xd * MOVE_STEP;
+		y -= data->map.player.yd * MOVE_STEP;
 	}
+	else if (keycode == KEY_A)
+		rotate_player(&data->map.player, -ROT_STEP);
+	else if (keycode == KEY_D)
+		rotate_player(&data->map.player, ROT_STEP);
 	if (can_move_to(data, x, y))
 	{
 		data->map.player.x = x;
 		data->map.player.y = y;
 	}
-	data->map.player.xd = xd;
-	data->map.player.yd = yd;
 	return (0);
 }
 

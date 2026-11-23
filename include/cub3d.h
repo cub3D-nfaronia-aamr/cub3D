@@ -28,7 +28,19 @@
 # define WIDTH 1000
 # define HEIGHT 800
 # define ESC 65307
-# define PI 3.14159
+# define PI 3.14159265358979323846
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define MOVE_STEP 0.2
+# define FOV_PLANE 0.66
+
+# define COL_NORTH 0xFF0000
+# define COL_SOUTH 0x0000FF
+# define COL_EAST 0x00FF00
+# define COL_WEST 0xFFFF00
+# define ROT_STEP 0.17453292519943295
 
 typedef struct s_player
 {
@@ -46,6 +58,31 @@ typedef struct s_map
 	int			map_height;
 	t_player	player;
 }	t_map;
+
+/*
+** One ray, cast for one screen column.
+** dir: ray direction        delta: ray length to cross one grid cell (x / y)
+** side_x/side_y: ray length to the next vertical / horizontal grid line
+** map: current grid cell    step: +1 or -1 on each axis
+** side: 0 = hit a vertical grid line, 1 = a horizontal one
+** hit: 1 if a wall was found    perp: perpendicular distance to the wall
+*/
+typedef struct s_ray
+{
+	double	dir_x;
+	double	dir_y;
+	double	delta_x;
+	double	delta_y;
+	double	side_x;
+	double	side_y;
+	double	perp;
+	int		map_x;
+	int		map_y;
+	int		step_x;
+	int		step_y;
+	int		side;
+	int		hit;
+}	t_ray;
 
 typedef struct s_color
 {
@@ -106,5 +143,8 @@ void	texture_num(t_config *config, char *line, int *i);
 
 //draw_map.c
 void	draw_map(t_data *data);
+
+//raycast.c
+void	render_3d(t_data *data);
 
 #endif

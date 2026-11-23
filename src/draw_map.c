@@ -2,12 +2,16 @@
 
 #define MAP_TILE_SIZE 10
 #define PLAYER_SIZE 6
+#define DIR_LINE_LEN 25
 
 static int	tile_color(char tile)
 {
-	if (tile >= '1')
+	if (tile >= '1' && tile <= '9')
 		return (0x808080);
-	return (0x202020);
+	if (tile == '0' || tile == 'N' || tile == 'S'
+		|| tile == 'E' || tile == 'W')
+		return (0x202020);
+	return (0x000000);
 }
 
 static void	draw_tile(t_data *data, int x, int y, int color)
@@ -50,11 +54,31 @@ static void	draw_player(t_data *data)
 	}
 }
 
+/* Line from the player's center in the direction it is facing. */
+static void	draw_direction(t_data *data)
+{
+	double	cx;
+	double	cy;
+	int		i;
+
+	cx = data->map.player.x * MAP_TILE_SIZE;
+	cy = data->map.player.y * MAP_TILE_SIZE;
+	i = 0;
+	while (i < DIR_LINE_LEN)
+	{
+		my_mlx_pixel_put(&data->mlx, (int)(cx + data->map.player.xd * i),
+			(int)(cy + data->map.player.yd * i), 0xFF0000);
+		i++;
+	}
+}
+
+/* 3D view fills the whole image; the minimap is then drawn on top of it. */
 void	draw_map(t_data *data)
 {
 	int	x;
 	int	y;
 
+	render_3d(data);
 	y = 0;
 	while (y < data->map.map_height)
 	{
@@ -67,5 +91,6 @@ void	draw_map(t_data *data)
 		y++;
 	}
 	draw_player(data);
+	draw_direction(data);
 	mlx_put_image_to_window(data->mlx.mlx, data->mlx.win, data->mlx.img, 0, 0);
 }

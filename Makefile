@@ -6,7 +6,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 # get_next_line
-GNL_DIR = src/get_next_line
+GNL_DIR = get_next_line
 
 
 GNL_SRC = $(GNL_DIR)/get_next_line.c \
@@ -26,6 +26,7 @@ OBJS = $(SRC:.c=.o)
 # Test sources and objects
 TEST_SRC = src/test.c \
 		   src/draw_map.c \
+		   src/raycast.c \
 		   src/hook.c \
 		   src/utils.c
 TEST_OBJS = $(TEST_SRC:.c=.o)
@@ -64,6 +65,7 @@ $(LIBFT):
 
 # MLX compilation
 $(MLX):
+	chmod +x $(MLX_DIR)/configure
 	$(MAKE) -C $(MLX_DIR)
 
 # Clean object files
