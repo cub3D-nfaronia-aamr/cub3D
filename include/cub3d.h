@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaronia <nfaronia@student.42amman.com>    +#+  +:+       +#+        */
+/*   By: aamr <aamr@student.42amman.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:24 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/10/08 17:28:14 by nfaronia         ###   ########.fr       */
+/*   Updated: 2026/10/16 23:13:28 by aamr             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "mlx.h"
-# include "libft.h"
-# include "get_next_line.h"
+# include "../minilibx-linux/mlx.h"
+# include "../libft/libft.h"
+# include "../get_next_line/get_next_line.h"
 
 # include <stdio.h>
 # include <unistd.h>
@@ -28,14 +28,26 @@
 # define WIDTH 1000
 # define HEIGHT 800
 # define ESC 65307
-# define PI 3.14159
+# define PI 3.14159265358979323846
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define MOVE_STEP 0.2
+# define FOV_PLANE 0.66
+
+# define COL_NORTH 0xFF0000
+# define COL_SOUTH 0x0000FF
+# define COL_EAST 0x00FF00
+# define COL_WEST 0xFFFF00
+# define ROT_STEP 0.17453292519943295
 
 typedef struct s_player
 {
 	double	x;
 	double	y;
-	double	x_direction;
-	double	y_direction;
+	double	xd;
+	double	yd;
 	double	angle;
 }	t_player;
 
@@ -46,6 +58,31 @@ typedef struct s_map
 	int			map_height;
 	t_player	player;
 }	t_map;
+
+/*
+** One ray, cast for one screen column.
+** dir: ray direction        delta: ray length to cross one grid cell (x / y)
+** side_x/side_y: ray length to the next vertical / horizontal grid line
+** map: current grid cell    step: +1 or -1 on each axis
+** side: 0 = hit a vertical grid line, 1 = a horizontal one
+** hit: 1 if a wall was found    perp: perpendicular distance to the wall
+*/
+typedef struct s_ray
+{
+	double	dir_x;
+	double	dir_y;
+	double	delta_x;
+	double	delta_y;
+	double	side_x;
+	double	side_y;
+	double	perp;
+	int		map_x;
+	int		map_y;
+	int		step_x;
+	int		step_y;
+	int		side;
+	int		hit;
+}	t_ray;
 
 typedef struct s_color
 {
@@ -84,7 +121,7 @@ typedef struct s_data
 }	t_data;
 
 //hook.c
-int		key_hook(int keycode, t_mlx *game);
+int		key_hook(int keycode, void *param);
 int		expose_hook(void *param);
 
 //utils.c
@@ -102,5 +139,12 @@ void	find_player(t_map *map, t_player *player);
 //texture.c
 void	texture_char(t_config *config, char *line, int *i);
 void	texture_num(t_config *config, char *line, int *i);
+
+
+//draw_map.c
+void	draw_map(t_data *data);
+
+//raycast.c
+void	render_3d(t_data *data);
 
 #endif
