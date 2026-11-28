@@ -6,7 +6,7 @@
 /*   By: aamr <aamr@student.42amman.com>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/04 14:18:24 by nfaronia          #+#    #+#             */
-/*   Updated: 2026/10/16 23:13:28 by aamr             ###   ########.fr       */
+/*   Updated: 2026/11/21 15:03:39 by nfaronia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,21 @@
 # include <sys/time.h>
 # include <string.h>
 
-# define WIDTH 1000
-# define HEIGHT 800
-# define ESC 65307
+# define WIDTH    1000
+# define HEIGHT   800
+# define ESC      65307
+# define W        119
+# define A        97
+# define S        115
+# define D        100
+# define LEFT     65361
+# define RIGHT    65363
+# define UP       65362
+# define DOWN     65364
+# define RADIUS   0.15
+# define MOVE     0.05
+# define ROTATION 0.05
+
 # define PI 3.14159265358979323846
 # define KEY_W 119
 # define KEY_A 97
@@ -113,11 +125,22 @@ typedef struct s_mlx
 	int		endian;
 }	t_mlx;
 
+typedef struct s_keys
+{
+	int	w;
+	int	a;
+	int	s;
+	int	d;
+	int	left;
+	int	right;
+}	t_keys;
+
 typedef struct s_data
 {
 	t_config	config;
 	t_map		map;
 	t_mlx		mlx;
+	t_keys		keys;
 }	t_data;
 
 //hook.c
@@ -130,15 +153,51 @@ void	clean_exit(t_mlx *game);
 int		close_window(void *param);
 void	my_mlx_pixel_put(t_mlx *image, int x, int y, int color);
 
+//error_clean_utils.c
+void	error_msg(char *msg);
+
 //parse
-//parser.c
-void	open_file(t_map *map, t_config *config, t_player *player);
-void	map_data(t_map *map, char *line, int *i, int num_line);
-void	find_player(t_map *map, t_player *player);
+//config.c
+void	init_config(t_config *config);
+void	free_config(t_config *config);
+int		not_empty_config(t_config *config);
+
+//map.c
+void	init_map(t_map *map);
+void	free_map(t_map *map);
+char	*map_data(t_map *map, char *line, int num_line);
+int		allocate_map(t_map *map, int num_line);
+int		allow_char_map(char *line);
+
+//open_file.c
+int		open_file(t_map *map, t_config *config, t_player *player, char *argv);
+
+//parser_file.c
+int		count_map_line(int fd);
+int		parse_file(t_map *map, t_config *config, int fd);
+int		is_empty_line(char *line);
+int		is_direction_line(char *line);
+int		is_color_line(char *line);
+void	skip_spaces(char *line, int *i);
+int		fail_line(char *line);
+
+//pcolor.c
+int		pcolor(t_config *config, char *line, int *i);
+int		rgb_data(t_config *config, char **numbers, char type);
+void	free_split(char **str);
+int		split_count(char **str);
+char	**remove_spaces(char **numbers);
+char	*get_color_line(char *line, int *i);
+
+//player.c
+int		validate_player(t_map *map, t_player *player);
 
 //texture.c
-void	texture_char(t_config *config, char *line, int *i);
-void	texture_num(t_config *config, char *line, int *i);
+int		texture(t_config *config, char *line, int *i);
+int		correct_path(char *path);
+
+//validate_walls.c
+int		validate_walls(t_map *map);
 
 
 //draw_map.c

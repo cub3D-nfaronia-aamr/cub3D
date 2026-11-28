@@ -15,9 +15,21 @@ GNL_SRC = $(GNL_DIR)/get_next_line.c \
 # Sources
 SRC =	src/main.c\
 		src/utils.c\
+		src/error_clean_utils.c\
 		src/hook.c\
-		src/parse/parser.c\
+		src/parse/config.c\
+		src/parse/map.c\
+		src/parse/open_file.c\
+		src/parse/parser_file.c\
+		src/parse/parse_utils.c\
+		src/parse/pcolor_utils1.c\
+		src/parse/pcolor_utils2.c\
+		src/parse/pcolor.c\
+		src/parse/player.c\
+		src/parse/texture_utils.c\
 		src/parse/texture.c\
+		src/parse/validate_walls.c\
+
 		$(GNL_SRC)
 
 # Objects
