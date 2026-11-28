@@ -25,11 +25,11 @@ int	main(int argc, char **argv)
 	if (!open_file(&data.map, &data.config, &data.map.player, argv[1]))
 		return (1);
 	initialize(&data);
-	mlx_expose_hook(data.mlx.win, expose_hook, &data);
+	mlx_expose_hook(data.mlx.win, render, &data);
 	mlx_hook(data.mlx.win, 2, 1L << 0, key_press, &data);
 	mlx_hook(data.mlx.win, 3, 1L << 1, key_release, &data);
 	mlx_loop_hook(data.mlx.mlx, game_loop, &data);
-	mlx_hook(data.mlx.win, 17, 0, close_window, &data);
+	mlx_hook(data.mlx.win, 17, 0, game_close, &data);
 	mlx_loop(data.mlx.mlx);
 	return (0);
 }

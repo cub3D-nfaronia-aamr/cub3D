@@ -1,0 +1,6 @@
+*.o
+*.a
+cub3d
+cub3d_test
+src/test
+minilibx-linux/obj/

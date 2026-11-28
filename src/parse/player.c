@@ -42,8 +42,8 @@ static void	init_player(t_player *player, int x, int y)
 {
 	player->x = x + 0.5;
 	player->y = y + 0.5;
-	player->x_direction = 0;
-	player->y_direction = 0;
+	player->xd = 0;
+	player->yd = 0;
 	player->angle = 0;
 }
 
@@ -52,24 +52,24 @@ static void	set_player_direction(t_map *map, t_player *player, int x, int y)
 	init_player(player, x, y);
 	if (map->map_data[y][x] == 'N')
 	{
-		player->y_direction = -1;
+		player->yd = -1;
 		player->angle = -M_PI / 2;
 		return ;
 	}
 	else if (map->map_data[y][x] == 'S')
 	{
-		player->y_direction = 1;
+		player->yd = 1;
 		player->angle = M_PI / 2;
 		return ;
 	}
 	else if (map->map_data[y][x] == 'E')
 	{
-		player->x_direction = 1;
+		player->xd = 1;
 		return ;
 	}
 	else if (map->map_data[y][x] == 'W')
 	{
-		player->x_direction = -1;
+		player->xd = -1;
 		player->angle = M_PI;
 		return ;
 	}

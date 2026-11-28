@@ -17,11 +17,16 @@ SRC =	src/main.c\
 		src/utils.c\
 		src/error_clean_utils.c\
 		src/hook.c\
+		src/game.c\
+		src/keys.c\
+		src/move.c\
+		src/draw_map.c\
+		src/raycast.c\
 		src/parse/config.c\
 		src/parse/map.c\
 		src/parse/open_file.c\
 		src/parse/parser_file.c\
-		src/parse/parse_utils.c\
+		src/parse/parser_utils.c\
 		src/parse/pcolor_utils1.c\
 		src/parse/pcolor_utils2.c\
 		src/parse/pcolor.c\
@@ -29,7 +34,6 @@ SRC =	src/main.c\
 		src/parse/texture_utils.c\
 		src/parse/texture.c\
 		src/parse/validate_walls.c\
-
 		$(GNL_SRC)
 
 # Objects

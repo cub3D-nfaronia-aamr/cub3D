@@ -83,7 +83,7 @@ void	draw_map(t_data *data)
 	while (y < data->map.map_height)
 	{
 		x = 0;
-		while (x < data->map.map_width)
+		while (x < data->map.map_width && data->map.map_data[y][x])
 		{
 			draw_tile(data, x, y, tile_color(data->map.map_data[y][x]));
 			x++;

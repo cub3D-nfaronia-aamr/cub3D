@@ -206,4 +206,18 @@ void	draw_map(t_data *data);
 //raycast.c
 void	render_3d(t_data *data);
 
+//game.c
+void	free_game(t_data *data);
+int		game_close(void *param);
+void	initialize(t_data *data);
+int		render(void *param);
+int		game_loop(void *param);
+
+//keys.c
+int		key_press(int keycode, void *param);
+int		key_release(int keycode, void *param);
+
+//move.c
+void	move_player(t_data *data);
+
 #endif

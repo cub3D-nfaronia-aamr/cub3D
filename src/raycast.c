@@ -86,10 +86,16 @@ static void	run_dda(t_data *data, t_ray *r)
 	}
 }
 
+/* Floor / ceiling colour from the .cub file (F and C lines). */
+static int	rgb(t_color c)
+{
+	return ((c.r << 16) | (c.g << 8) | c.b);
+}
+
 /*
 ** side 0 = the ray crossed a vertical grid line (moving east or west).
 ** side 1 = it crossed a horizontal grid line (moving north or south).
-** Above and below the wall is black (ceiling and floor).
+** Above the wall is the ceiling colour, below it the floor colour.
 */
 static void	draw_column(t_data *data, t_ray *r, int col)
 {
@@ -113,10 +119,12 @@ static void	draw_column(t_data *data, t_ray *r, int col)
 	y = -1;
 	while (++y < HEIGHT)
 	{
-		if (y >= start && y < end)
+		if (y < start)
+			my_mlx_pixel_put(&data->mlx, col, y, rgb(data->config.ceiling));
+		else if (y < end)
 			my_mlx_pixel_put(&data->mlx, col, y, color);
 		else
-			my_mlx_pixel_put(&data->mlx, col, y, 0x000000);
+			my_mlx_pixel_put(&data->mlx, col, y, rgb(data->config.floor));
 	}
 }
 
